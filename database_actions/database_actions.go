@@ -31,6 +31,12 @@ func (db *Db) disconnect() {
 }
 
 func (db *Db) GetAllRows(table string, data interface{}) {
+	/*
+		GetAllRows возвращает все записи из таблицы.
+		Parameters:
+			table - название таблицы
+			data - данные для вставки
+	*/
 	db.connect()
 	defer db.disconnect()
 	sqlstr := fmt.Sprintf("select * from %s", table)
@@ -41,21 +47,27 @@ func (db *Db) GetAllRows(table string, data interface{}) {
 }
 
 func (db *Db) DeleteAllRows(table string) {
+	/*
+		DeleteAllRows удаляет все записи из таблицы.
+		Parameters:
+			table - название таблицы
+	*/
 	db.connect()
 	defer db.disconnect()
 	sqlstr := fmt.Sprintf("delete from %s", table)
 	_, db.Err = db.Db.Exec(sqlstr)
 	if db.Err != nil {
-		panic(db.Err)
+		fmt.Println(db.Err)
 	}
 }
 
 func (db *Db) InsertRow(table string, ColsNamesSlice []string, data interface{}) {
 	/*
 		InsertRow добавляет новую строку в таблицу.
-		В качестве аргументов принимает название таблицы, список названий столбцов и данные для вставки.
-		Функция возвращает нет, так как для вставки данных в БД нет необходимости возвращать какие-либо значения.
-		Если в процессе вставки произошла ошибка, она выводится в консоль.
+		Parameters:
+			table - название таблицы
+			ColsNamesSlice - названия столбцов
+			data - данные для вставки
 	*/
 	db.connect()
 	defer db.disconnect()
@@ -75,5 +87,22 @@ func (db *Db) InsertRow(table string, ColsNamesSlice []string, data interface{})
 	_, err := db.Db.NamedExec(sqlstr, data)
 	if err != nil {
 		fmt.Println(err)
+	}
+}
+
+func (db *Db) GetRowByCondition(table, cols, condition string, data interface{}) {
+	/*
+		GetRowByCondition возвращает первую строку по условию.
+		Parameters:
+			table - название таблицы
+			cols - названия столбцов
+			condition - условие
+			data - данные для вставки
+	*/
+	db.connect()
+	defer db.disconnect()
+	db.Err = db.Db.Get(data, "select ? from tpa_risks where ?", cols, condition)
+	if db.Err != nil {
+		fmt.Println(db.Err)
 	}
 }
