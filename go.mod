@@ -1,4 +1,4 @@
-module github.com/khudaibirdin/GoLangModules.git
+module GoLangModules
 
 go 1.22.5
 
