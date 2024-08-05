@@ -101,7 +101,8 @@ func (db *Db) GetRowByCondition(table, cols, condition string, data interface{})
 	*/
 	db.connect()
 	defer db.disconnect()
-	db.Err = db.Db.Get(data, "select (?) from ? where ?", cols, table, condition)
+	sqlstr := fmt.Sprintf("SELECT %s FROM %s where %s", cols, table, condition)
+	db.Err = db.Db.Get(data, sqlstr)
 	if db.Err != nil {
 		fmt.Println(db.Err)
 	}
