@@ -101,7 +101,7 @@ func (db *Db) GetRowByCondition(table, cols, condition string, data interface{})
 	*/
 	db.connect()
 	defer db.disconnect()
-	db.Err = db.Db.Get(data, "select ? from tpa_risks where ?", cols, condition)
+	db.Err = db.Db.Get(data, "select ? from ? where ?", cols, table, condition)
 	if db.Err != nil {
 		fmt.Println(db.Err)
 	}
